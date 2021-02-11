@@ -19,7 +19,7 @@ void menu()
 {
   x = 2;
   tft.setTextSize(2);
-  tft.fillScreen(TFT_BLACK);
+  //tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString("PRESET MENU",70,5,x);
   if (MenuCouter == 1){
@@ -154,6 +154,7 @@ void setup() {
   menu();
   MenuActive = true;
 
+
 }
 void loop() {
   
@@ -267,6 +268,7 @@ void loop() {
                 T.StopTimer();
                 MenuActive = true;
                 Emission = false;
+                tft.fillScreen(TFT_BLACK);
                 menu();
                 break;
                 } 
