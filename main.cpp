@@ -9,9 +9,9 @@ TFT_ILI9341 tft = TFT_ILI9341(); // configuration of LCD display for ILI9341
 
 CountUpDownTimer T(DOWN); // configuration of timer down 
 SuperButton ChoiceButton(A1,69,400,400); // configuration of ChoiceButton(bypass_bounce, doubletime, longertime )
-  bool pause,Emission,MenuActive,NonStopEmission;
+  bool pause,Emission,MenuActive,NonStopEmission,CustomActive;
   bool i;
-  int hh,mm,ss,SettingTime,MenuCouter,x; 
+  int hh,mm,ss,SettingTime,MenuCouter,x,hour,minutes; 
   char hhmm[10];
   char secs[5];
 
@@ -152,7 +152,10 @@ void setup() {
   Emission = false;// merker is emision is active or not ( timer is running)  
   MenuCouter = 1; //default active item in menu
   NonStopEmission = false; // merker for hiding time on timer screen
- menu();
+  hour = 0; // hour for custom setting
+  minutes = 0; //minutes for custom setting
+  CustomActive = false; // flag for custom menu
+  menu();
 
 }
 void loop() {
@@ -162,10 +165,12 @@ void loop() {
   Serial.println (T.TimeCheck());
   Serial.println (Emission);
   Serial.println (MenuActive);
-  Serial.println (MenuCouter);
+  Serial.println(CustomActive);
+  
+   
   
   if (T.TimeHasChanged()) time_changed();  // time remaining display routine
-  if ((T.TimeCheck()) & (MenuActive == false) & (i == true)) {     // green display with end of countdown
+  if ((T.TimeCheck()) & (MenuActive == false) & (i == true) & (SettingTime = 0)) {     // green display with end of countdown
     end_of_ozone_emision_display();
     i = false; 
     Emission = false;                            //once input into green display at end of countdown
@@ -185,14 +190,14 @@ void loop() {
                 menu();
                 break;
               }
-            {
-              if (!(T.TimeCheck()) & (pause == false)& (MenuActive==false)) { //pausing timer by short pressing ChoiceButton  
+            
+              if (!(T.TimeCheck()) & (pause == false)& (MenuActive==false) ) { //pausing timer by short pressing ChoiceButton  
                 T.PauseTimer();
                 pause = true;
                 break;                            
-            }
-                }
-              if ((T.TimeCheck()) & (SettingTime == 0)& (MenuActive==false)) { //enter into setup mode for timer times
+               }
+                
+              /*if ((T.TimeCheck()) & (SettingTime == 0)& (MenuActive==false)) { //enter into setup mode for setting timer times
                 tft.fillScreen(TFT_BLACK);                // setting hours counter
                 tft.setTextColor(TFT_WHITE, TFT_BLACK);
                 tft.drawString(hhmm,20,20,7);
@@ -200,8 +205,8 @@ void loop() {
                 tft.drawString("HOURS",55,160,1);
                 SettingTime = 1;
                 break;
-              }
-              if ((T.TimeCheck()) & (SettingTime == 1)& (MenuActive==false)) {  // setting minutes counter
+              }*/
+              /*if ((T.TimeCheck()) & (SettingTime == 1)& (MenuActive==false)) {  // setting minutes counter
                 tft.fillScreen(TFT_BLACK);
                 tft.setTextColor(TFT_WHITE, TFT_BLACK);
                 tft.drawString(hhmm,20,20,7);
@@ -209,8 +214,8 @@ void loop() {
                 tft.drawString("MINUTES",195,160,1);
                 SettingTime = 2;
                 break; 
-               }
-                if ((T.TimeCheck()) & (SettingTime == 2)& (MenuActive==false)) {  // start custom emission
+               }*/
+                if ((T.TimeCheck()) & (SettingTime == 2)& (MenuActive==false) & (CustomActive == true)) {  // start custom emission
                 tft.fillScreen(TFT_BLACK);
                 tft.setTextColor(TFT_YELLOW, TFT_BLACK);
                 tft.drawString(hhmm,20,20,7);
@@ -219,15 +224,23 @@ void loop() {
                 SettingTime = 0;
                 Emission = true;
                 break; }
+
+                if ((MenuCouter = 3) & (T.TimeCheck()) & (SettingTime == 1) & (MenuActive==false) & (CustomActive == true) ) {
+                  ++hour;
+                  tft.fillScreen(TFT_YELLOW);
+                  tft.drawString(hour,20,20,7);
+                  break;
+                }
             } 
-                case SuperButton::Press::DOUBLE:
-                {
+              
+          case SuperButton::Press::DOUBLE:
+              {
                 Serial.println("double pressed");
                 break;
-                }  
+              }  
                 
-                case SuperButton::Press::LONGER:{
-                if ((T.TimeCheck()) & (Emission == true)& (MenuActive==false)) {  // starting up timer to emmision of ozone
+          case SuperButton::Press::LONGER:{
+                if ( (T.TimeCheck()) & (Emission) & (MenuActive == false) & (CustomActive == false) ) {  // starting up timer to emmision of ozone
                   tft.fillScreen(TFT_BLUE);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
                   tft.drawString(hhmm,20,20,7);
@@ -237,7 +250,8 @@ void loop() {
                   i = true; 
                   break;   
                   }  
-                if ((T.TimeCheck()) & (Emission == false) & (MenuActive==true)) { // starting emission with 20min
+                if ((T.TimeCheck()) & (Emission == false) & (MenuActive == true) & (CustomActive == false)) 
+                  { // starting emission with 20min
                   if (MenuCouter == 1) {
                   tft.fillScreen(TFT_BLUE);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
@@ -249,8 +263,8 @@ void loop() {
                   }
                   if (MenuCouter == 2) {    // starting infinitive emission - 2 choose of menu
                   tft.fillScreen(TFT_RED);
-                  tft.setTextColor(TFT_WHITE, TFT_RED);
-                  tft.drawString("NON STOP EMISSION",20,20,7);
+                  tft.setTextColor(TFT_WHITE, TFT_BLUE);
+                  tft.drawString("NON STOP EMISSION",20,20,2);
                   T.SetTimer(99,0,30,0); 
                   T.StartTimer(); 
                   MenuActive = false;
@@ -258,15 +272,30 @@ void loop() {
                   NonStopEmission = true;
                   break;
                   }
+                   if (MenuCouter == 3) {      // entering starting custom preset time emission - 3 choose of menu
+                    hour = 0;
+                    minutes = 0;
+                    tft.fillScreen(TFT_BLACK); // setting hours counter
+                    tft.setTextColor(TFT_WHITE, TFT_BLACK);
+                    tft.drawString("00:00",20,20,7);
+                    tft.fillTriangle(85, 125, 35, 150, 135, 150, TFT_YELLOW);
+                    tft.drawString("HOURS",55,160,1);
+                    SettingTime = 1;
+                    MenuActive = false;
+                    CustomActive = true;
+                    
+                  break;
+                  }
                 }
                 if (!(T.TimeCheck()) & (Emission == true) & (MenuActive==false)){ //breaking working timer and go into menu
-                T.SetTimer(0,0,0,0); 
-                T.StopTimer();
-                Emission = false;
-                tft.fillScreen(TFT_BLACK);
-                NonStopEmission = false;
-                menu();
-                break;
+                  T.SetTimer(0,0,0,0); 
+                  T.StopTimer();
+                  Emission = false;
+                  tft.fillScreen(TFT_BLACK);
+                  NonStopEmission = false;
+                  CustomActive = false;
+                  menu();
+                  break;
                 } 
               }
         }
