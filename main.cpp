@@ -9,7 +9,7 @@ TFT_ILI9341 tft = TFT_ILI9341(); // configuration of LCD display for ILI9341
 
 CountUpDownTimer T(DOWN); // configuration of timer down 
 SuperButton ChoiceButton(A1,69,400,400); // configuration of ChoiceButton(bypass_bounce, doubletime, longertime )
-  bool pause,Emission,MenuActive;
+  bool pause,Emission,MenuActive,NonStopEmission;
   bool i;
   int hh,mm,ss,SettingTime,MenuCouter,x; 
   char hhmm[10];
@@ -18,8 +18,8 @@ SuperButton ChoiceButton(A1,69,400,400); // configuration of ChoiceButton(bypass
 void menu()
 {
   x = 2;
+  MenuActive = true;
   tft.setTextSize(2);
-  //tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString("PRESET MENU",70,5,x);
   if (MenuCouter == 1){
@@ -129,8 +129,8 @@ void time_changed()
   ss = T.ShowSeconds();
   sprintf (hhmm, "%02u:%02u", hh, mm);
   sprintf (secs, "%02u", ss);
-  tft.drawString(hhmm,20,20,7);
-  tft.drawString(secs,99,130,7); 
+  if (NonStopEmission == false) tft.drawString(hhmm,20,20,7);
+  if (NonStopEmission == false) tft.drawString(secs,99,130,7); 
 }
 void end_of_ozone_emision_display() 
 {
@@ -145,15 +145,14 @@ void setup() {
   Serial.begin(9600);
   tft.init();
   tft.setRotation(1);
-  tft.fillScreen(TFT_BLUE);
+  tft.fillScreen(TFT_BLACK);
   i = true;   //merker to go into green end display only once 
   pause = false; //merker to catch timer is paused or not
   SettingTime = 0; // default window for hours setting
   Emission = false;// merker is emision is active or not ( timer is running)  
   MenuCouter = 1; //default active item in menu
-  menu();
-  MenuActive = true;
-
+  NonStopEmission = false; // merker for hiding time on timer screen
+ menu();
 
 }
 void loop() {
@@ -228,7 +227,7 @@ void loop() {
                 }  
                 
                 case SuperButton::Press::LONGER:{
-                  if ((T.TimeCheck()) & (Emission == true)& (MenuActive==false)) {  // starting up timer to emmision of ozone
+                if ((T.TimeCheck()) & (Emission == true)& (MenuActive==false)) {  // starting up timer to emmision of ozone
                   tft.fillScreen(TFT_BLUE);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
                   tft.drawString(hhmm,20,20,7);
@@ -238,14 +237,10 @@ void loop() {
                   i = true; 
                   break;   
                   }  
-                
-                
-                               
                 if ((T.TimeCheck()) & (Emission == false) & (MenuActive==true)) { // starting emission with 20min
                   if (MenuCouter == 1) {
                   tft.fillScreen(TFT_BLUE);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
-                  tft.drawString(hhmm,20,20,7);
                   T.SetTimer(0,0,30,0); 
                   T.StartTimer(); 
                   MenuActive = false;
@@ -255,20 +250,21 @@ void loop() {
                   if (MenuCouter == 2) {    // starting infinitive emission - 2 choose of menu
                   tft.fillScreen(TFT_RED);
                   tft.setTextColor(TFT_WHITE, TFT_RED);
-                  tft.drawString("ALWAYS EMISSION",20,20,7);
+                  tft.drawString("NON STOP EMISSION",20,20,7);
                   T.SetTimer(99,0,30,0); 
                   T.StartTimer(); 
                   MenuActive = false;
                   Emission = true;
+                  NonStopEmission = true;
                   break;
                   }
                 }
                 if (!(T.TimeCheck()) & (Emission == true) & (MenuActive==false)){ //breaking working timer and go into menu
                 T.SetTimer(0,0,0,0); 
                 T.StopTimer();
-                MenuActive = true;
                 Emission = false;
                 tft.fillScreen(TFT_BLACK);
+                NonStopEmission = false;
                 menu();
                 break;
                 } 
