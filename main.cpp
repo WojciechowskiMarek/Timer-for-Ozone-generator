@@ -11,7 +11,7 @@ CountUpDownTimer T(DOWN); // configuration of timer down
 SuperButton ChoiceButton(A1,69,400,400); // configuration of ChoiceButton(bypass_bounce, doubletime, longertime )
   bool pause,Emission,MenuActive,NonStopEmission,CustomActive,MinuteMenu,HourMenu;
   bool i;
-  int hh,mm,ss,SettingTime,MenuCouter,x,hour,minutes; 
+  int hh,mm,ss,SettingTime,MenuCounter,x,hour,minutes; 
   char hhmm[10];
   char secs[5],CustomHour[5],CustomMin[5];
 
@@ -22,7 +22,7 @@ void menu()
   tft.setTextSize(2);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
   tft.drawString("PRESET MENU",70,5,x);
-  if (MenuCouter == 1){
+  if (MenuCounter == 1){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("30 MIN",15,40,x);
   }
@@ -31,7 +31,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("30 MIN",15,40,x);
   }
-  if (MenuCouter == 2){
+  if (MenuCounter == 2){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("ALWAYS",15,70,x);
   }
@@ -39,7 +39,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("ALWAYS",15,70,x);
   }
-  if (MenuCouter == 3){
+  if (MenuCounter == 3){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("CUSTOM",15,100,x);
   }
@@ -47,7 +47,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("CUSTOM",15,100,x);
   }
-  if (MenuCouter == 4){
+  if (MenuCounter == 4){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("20 MIN",15,130,x);
   }
@@ -55,7 +55,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("20 MIN",15,130,x);
   }
-  if (MenuCouter == 5){
+  if (MenuCounter == 5){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("25 MIN",15,160,x);
   }
@@ -63,7 +63,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("25 MIN",15,160,x);
   }
-  if (MenuCouter == 6){
+  if (MenuCounter == 6){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("45 MIN",15,190,x);
   }
@@ -71,7 +71,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("45 MIN",15,190,x);
   }
-  if (MenuCouter == 7){
+  if (MenuCounter == 7){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("1 HOUR",170,40,x);
   }
@@ -79,7 +79,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("1 HOUR",170,40,x);
   }
-  if (MenuCouter == 8){
+  if (MenuCounter == 8){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("1H 15MIN",160,70,x);
   }
@@ -87,7 +87,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("1H 15MIN",160,70,x);
   }
-  if (MenuCouter == 9){
+  if (MenuCounter == 9){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("1H 30MIM",160,100,x);
   }
@@ -95,7 +95,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("1H 30MIM",160,100,x);
   }
-  if (MenuCouter == 10){
+  if (MenuCounter == 10){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("1H 45MIN",160,130,x);
   }
@@ -103,7 +103,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("1H 45MIN",160,130,x);
   }
-  if (MenuCouter == 11){
+  if (MenuCounter == 11){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
   tft.drawString("2 HOURS",170,160,x);
   }
@@ -111,7 +111,7 @@ void menu()
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
     tft.drawString("2 HOURS",170,160,x);
   }
-  if (MenuCouter == 12){
+  if (MenuCounter == 12){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.drawString("4 HOURS",170,190,x);
   }
@@ -151,7 +151,7 @@ void setup() {
   pause = false; //merker to catch timer is paused or not
   SettingTime = 0; // default window for hours setting
   Emission = false;// merker is emision is active or not ( timer is running)  
-  MenuCouter = 1; //default active item in menu
+  MenuCounter = 1; //default active item in menu
   NonStopEmission = false; // merker for hiding time on timer screen
   hour = 0; // hour for custom setting
   minutes = 0; //minutes for custom setting
@@ -190,8 +190,8 @@ void loop() {
                 CustomActive = false; // flag for custom menu
                 MinuteMenu = false;
                 HourMenu = false;
-                ++MenuCouter;
-                if (MenuCouter > 12) MenuCouter = 1;
+                ++MenuCounter;
+                if (MenuCounter > 12) MenuCounter = 1;
                 menu();
                 break;
               }
@@ -202,14 +202,14 @@ void loop() {
                 break;                            
                }
               
-              if ((MenuCouter == 3) & (HourMenu == true) & (MinuteMenu == false) & (CustomActive == false) & (MenuActive == false)){      // inc hours in custom menu
+              if ((MenuCounter == 3) & (HourMenu == true) & (MinuteMenu == false) & (CustomActive == false) & (MenuActive == false)){      // inc hours in custom menu
                   ++hour;
                   tft.setTextColor(TFT_WHITE, TFT_BLACK);
                   sprintf(CustomHour,"%02u", hour);
                   tft.drawString(CustomHour,20,20,7);                 
                   break;
                 }
-              if  ((MenuCouter == 3) & (HourMenu == false) & (MinuteMenu == true) & (CustomActive == false) & (MenuActive == false)) {   // inc minutes in custom menu
+              if  ((MenuCounter == 3) & (HourMenu == false) & (MinuteMenu == true) & (CustomActive == false) & (MenuActive == false)) {   // inc minutes in custom menu
                 ++minutes;
                 sprintf (CustomMin,"%02u",minutes);
                 tft.drawString(CustomMin,175,20,7);
@@ -227,7 +227,7 @@ void loop() {
           case SuperButton::Press::LONGER:{
                 
             if ((T.TimeCheck()) & (Emission == false) & (MenuActive == true)) { // starting emission with 20min
-                  if (MenuCouter == 1) {
+                  if (MenuCounter == 1) {
                   tft.fillScreen(TFT_BLUE);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
                   T.SetTimer(0,0,0,10); 
@@ -236,7 +236,7 @@ void loop() {
                   Emission = true;
                   break;
                   }
-            if (MenuCouter == 2) {    // starting infinitive emission - 2nd choose of menu
+            if (MenuCounter == 2) {    // starting infinitive emission - 2nd choose of menu
                   tft.fillScreen(TFT_RED);
                   tft.setTextColor(TFT_WHITE, TFT_BLUE);
                   tft.drawString("NON STOP EMISSION",20,20,2);
@@ -247,7 +247,7 @@ void loop() {
                   NonStopEmission = true;
                   break;
                   }
-              if  ((MenuCouter == 3)) {      // entering starting custom set time emission - 3 choose of menu
+              if  ((MenuCounter == 3)) {      // entering starting custom set time emission - 3 choose of menu
                     hour = 0;
                     minutes = 0;
                     tft.fillScreen(TFT_BLACK); 
@@ -262,7 +262,7 @@ void loop() {
                    break;
                   }
             }
-             if ((MenuCouter == 3) & (HourMenu == true)& (CustomActive == false)) {    //entering minutes setup
+             if ((MenuCounter == 3) & (HourMenu == true)& (CustomActive == false)) {    //entering minutes setup
                   tft.fillTriangle(85, 125, 35, 150, 135, 150, TFT_BLACK);
                   tft.drawRect(30,120,140,160,TFT_BLACK);
                   tft.fillTriangle(235, 125, 190, 150, 280, 150, TFT_YELLOW);
@@ -272,7 +272,7 @@ void loop() {
                   CustomActive = false;
                 break; 
                 }
-              if ((MenuCouter == 3) & (MinuteMenu == true)& (CustomActive == false)) {     //starting custom emission 
+              if ((MenuCounter == 3) & (MinuteMenu == true)& (CustomActive == false)) {     //starting custom emission 
                   tft.fillTriangle(235, 125, 190, 150, 280, 150, TFT_BLACK);
                   tft.setTextColor(TFT_YELLOW, TFT_BLACK);
                   tft.setTextSize(3);
