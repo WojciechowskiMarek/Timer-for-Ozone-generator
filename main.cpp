@@ -212,7 +212,7 @@ void loop() {
               if  ((MenuCounter == 3) & (HourMenu == false) & (MinuteMenu == true) & (CustomActive == false) & (MenuActive == false)) {   // inc minutes in custom menu
                 ++minutes;
                 sprintf (CustomMin,"%02u",minutes);
-                tft.drawString(CustomMin,175,20,7);
+                tft.drawString(CustomMin,173,20,7);
                 break; 
                 }
             
