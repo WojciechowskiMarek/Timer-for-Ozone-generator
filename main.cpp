@@ -218,13 +218,15 @@ void loop() {
           case SuperButton::Press::SINGLE: 
             {
               if (!(T.TimeCheck()) & (pause == true) & (MenuActive==false)) {//resume timer by single pressing Choice button
+                if (NonStopEmission == false) {
                 T.ResumeTimer();
                 pause = false;
                 Emission = true; 
-                if (NonStopEmission == false) tft.fillRect(10,160,90,50,TFT_BLUE);
-                if (NonStopEmission == false) drawIcon(alert, 40, 160, alertWidth, alertHeight);
+                tft.fillRect(10,160,90,50,TFT_BLUE);
+                drawIcon(alert, 40, 160, alertWidth, alertHeight);
+                 } 
                 break;                           
-            }
+               }
               if (MenuActive) {
                 CustomActive = false; // flag for custom menu
                 MinuteMenu = false;
@@ -235,10 +237,12 @@ void loop() {
                 break;
               }
               if (!(T.TimeCheck()) & (pause == false)& (MenuActive==false) ) { //pausing timer by short pressing ChoiceButton  
+                
+              if (NonStopEmission == false) {
                 T.PauseTimer();
                 pause = true;
                 Emission = false;
-                if (NonStopEmission == false) {tft.fillRect(10,160,50,50,TFT_BLUE);
+                tft.fillRect(10,160,50,50,TFT_BLUE);
                 tft.setTextSize(2);
                 tft.setTextColor(TFT_BLUE, TFT_YELLOW);
                 tft.drawString("PAUSE",10,160,2);
