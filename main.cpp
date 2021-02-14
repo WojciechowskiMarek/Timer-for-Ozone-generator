@@ -12,7 +12,7 @@ CountUpDownTimer T(DOWN); // configuration of timer down
 SuperButton ChoiceButton(A1,69,600,600); // configuration of ChoiceButton(bypass_bounce, doubletime, longertime )
   bool pause,Emission,MenuActive,NonStopEmission,CustomActive,MinuteMenu,HourMenu;
   bool i;
-  int hh,mm,ss,SettingTime,MenuCounter,x,hour,minutes; 
+  int hh,mm,ss,SettingTime,MenuCounter,x,hour,minutes,MenuHours,MenuMins; 
   char hhmm[10];
   char secs[5],CustomHour[5],CustomMin[5];
 
@@ -150,6 +150,15 @@ void menu()
     tft.drawString("4 HOURS",170,190,x);
   }
   }
+
+void menu_item_choosed (int MenuHours, int MenuMins) {
+  tft.fillScreen(TFT_BLUE);
+  tft.setTextColor(TFT_WHITE, TFT_BLUE);
+  MenuActive = false;
+  Emission = true;
+  T.SetTimer(0,MenuHours,MenuMins,0); 
+  T.StartTimer(); 
+ }
 void time_changed() // refreshing contdown timer 
 {
   tft.setTextSize(2);
@@ -182,7 +191,6 @@ void setup() {
   tft.fillScreen(TFT_BLACK);
   i = true;   //merker to go into green end display only once 
   pause = false; //merker to catch timer is paused or not
-  SettingTime = 0; // default window for hours setting
   Emission = false;// merker is emision is active or not ( timer is running)  
   MenuCounter = 1; //default active item in menu
   NonStopEmission = false; // merker for hiding time on timer screen
@@ -274,13 +282,8 @@ void loop() {
                 
               if ((T.TimeCheck()) & (Emission == false) & (MenuActive == true)) { // starting emission with 20min
                   if (MenuCounter == 1) {
-                  tft.fillScreen(TFT_BLUE);
-                  tft.setTextColor(TFT_WHITE, TFT_BLUE);
-                  T.SetTimer(0,0,0,10); 
-                  T.StartTimer(); 
-                  MenuActive = false;
-                  Emission = true;
-                  break;
+                   menu_item_choosed(0,30);
+                   break;
                   }
               if (MenuCounter == 2) {    // starting infinitive emission - 2nd choose of menu
                   tft.fillScreen(TFT_RED);
@@ -308,7 +311,43 @@ void loop() {
                     CustomActive = false;
                    break;
                   }
-            }
+              if  (MenuCounter == 4) {
+                   menu_item_choosed(0,20);
+                   break;
+                  }
+              if  (MenuCounter == 5) {
+                   menu_item_choosed(0,25);
+                   break;
+                  }
+              if  (MenuCounter == 6) {
+                   menu_item_choosed(0,45);
+                   break;
+                  }
+               if  (MenuCounter == 7) {
+                   menu_item_choosed(1,0);
+                   break;
+                  }
+              if  (MenuCounter == 8) {
+                   menu_item_choosed(1,15);
+                   break;
+                  }
+              if  (MenuCounter == 9) {
+                   menu_item_choosed(1,30);
+                   break;
+                  }
+              if  (MenuCounter == 10) {
+                   menu_item_choosed(1,40);
+                   break;
+                  }
+              if  (MenuCounter == 11) {
+                   menu_item_choosed(2,0);
+                   break;
+                  }
+              if  (MenuCounter == 12) {
+                   menu_item_choosed(4,0);
+                   break;
+                  }
+              }
               if ((MenuCounter == 3) & (HourMenu == true) & (CustomActive == false)) {    //entering minutes setup
                   tft.fillTriangle(85, 125, 35, 150, 135, 150, TFT_BLACK);
                   tft.drawRect(30,120,140,160,TFT_BLACK);
@@ -350,7 +389,7 @@ void loop() {
                     Emission = true;
                     break; 
                     }
-              }
+                 }
               if (!(T.TimeCheck()) & (Emission == true) & (MenuActive==false)){ //exit from running timer and get into menu
                   T.SetTimer(0,0,0,0); 
                   T.StopTimer();
