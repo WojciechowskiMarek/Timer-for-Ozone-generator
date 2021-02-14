@@ -171,8 +171,8 @@ void time_changed() // refreshing contdown timer
   sprintf (secs, "%02u", ss);
   if (NonStopEmission == false) tft.drawString(hhmm,20,20,7);
   if (NonStopEmission == false) tft.drawString(secs,99,130,7); 
-  if (Emission) drawIcon(alert, 40, 160, alertWidth, alertHeight);
-}
+  if (NonStopEmission == false) drawIcon(alert, 40, 160, alertWidth, alertHeight);
+  }
 
 void end_of_ozone_emision_display() 
 {
@@ -221,6 +221,8 @@ void loop() {
                 T.ResumeTimer();
                 pause = false;
                 Emission = true; 
+                if (NonStopEmission == false) tft.fillRect(10,160,90,50,TFT_BLUE);
+                if (NonStopEmission == false) drawIcon(alert, 40, 160, alertWidth, alertHeight);
                 break;                           
             }
               if (MenuActive) {
@@ -236,7 +238,11 @@ void loop() {
                 T.PauseTimer();
                 pause = true;
                 Emission = false;
-                tft.drawString("PAUSE",40,20,TFT_WHITE);
+                if (NonStopEmission == false) {tft.fillRect(10,160,50,50,TFT_BLUE);
+                tft.setTextSize(2);
+                tft.setTextColor(TFT_BLUE, TFT_YELLOW);
+                tft.drawString("PAUSE",10,160,2);
+                }
                 break;                            
                }
               if ((MenuCounter == 3) & (HourMenu == true) & (MinuteMenu == false) & (CustomActive == false) & (MenuActive == false)){      // inc hours in custom menu
@@ -245,7 +251,7 @@ void loop() {
                   tft.setTextColor(TFT_WHITE, TFT_BLACK);
                   sprintf(CustomHour,"%02u", hour);
                   tft.drawString(CustomHour,20,20,7);  
-                               
+                        
                   break;
                 }
               if  ((MenuCounter == 3) & (HourMenu == false) & (MinuteMenu == true) & (CustomActive == false) & (MenuActive == false)) {   // inc minutes in custom menu
@@ -360,7 +366,7 @@ void loop() {
                 }
               if ((MenuCounter == 3) & (MinuteMenu == true) & (CustomActive == false)) {     //starting custom emission 
                   
-                  if ((hour == 0) & (minutes == 0)) {
+                  if ((hour == 0) & (minutes == 0)) {  // if seted 0 time set up again hours tab
                     tft.fillScreen(TFT_BLACK); 
                     tft.setTextColor(TFT_WHITE, TFT_BLACK);
                     tft.drawRect(0,0,320,240,TFT_WHITE);
