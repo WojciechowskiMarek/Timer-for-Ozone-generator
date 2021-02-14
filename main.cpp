@@ -154,6 +154,7 @@ void time_changed() // refreshing contdown timer
 {
   tft.setTextSize(2);
   tft.setTextColor(TFT_WHITE, TFT_BLUE);
+  tft.drawRect(0,0,320,240,TFT_WHITE);
   hh = T.ShowHours();
   mm = T.ShowMinutes();
   ss = T.ShowSeconds();
@@ -169,6 +170,7 @@ void end_of_ozone_emision_display()
   tft.setTextSize(2);
   tft.setTextColor(TFT_WHITE, TFT_DARKGREEN);
   tft.fillScreen(TFT_DARKGREEN);
+  tft.drawRect(0,0,320,240,TFT_WHITE);
   tft.drawString(hhmm,20,20,7); //hours and minutes display
   tft.drawString(secs,99,130,7);//seconds display
 }  
