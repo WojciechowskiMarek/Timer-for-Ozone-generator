@@ -261,8 +261,7 @@ void loop() {
                 tft.drawString(CustomMin,173,20,7);
                 break; 
                 }
-            
-            } 
+              } // end of single button click routines
               
           case SuperButton::Press::DOUBLE:
               {
@@ -282,7 +281,7 @@ void loop() {
                     tft.drawString(CustomMin,173,20,7);
                     break;
                     }                
-                }  
+                }  // end of double click routines
                            
           case SuperButton::Press::LONGER:{
                 
@@ -303,19 +302,19 @@ void loop() {
                   break;
                   }
               if  ((MenuCounter == 3)) {      // entering starting custom set time emission - 3 choose of menu
-                    hour = 0;
-                    minutes = 0;
-                    tft.fillScreen(TFT_BLACK); 
-                    tft.setTextColor(TFT_WHITE, TFT_BLACK);
-                    tft.drawRect(0,0,320,240,TFT_WHITE);
-                    tft.drawString("00:00",20,20,7);
-                    tft.fillTriangle(85, 125, 35, 150, 135, 150, TFT_YELLOW);
-                    tft.drawString("HOURS",55,160,1);
-                    MenuActive = false;
-                    HourMenu = true;
-                    MinuteMenu = false;
-                    CustomActive = false;
-                   break;
+                  hour = 0;
+                  minutes = 0;
+                  tft.fillScreen(TFT_BLACK); 
+                  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+                  tft.drawRect(0,0,320,240,TFT_WHITE);
+                  tft.drawString("00:00",20,20,7);
+                  tft.fillTriangle(85, 125, 35, 150, 135, 150, TFT_YELLOW);
+                  tft.drawString("HOURS",55,160,1);
+                  MenuActive = false;
+                  HourMenu = true;
+                  MinuteMenu = false;
+                  CustomActive = false;
+                  break;
                   }
               if  (MenuCounter == 4) {
                    menu_item_choosed(0,20);
@@ -415,6 +414,6 @@ void loop() {
                   menu();
                   break;
                  }
-              } // longer close
+              } // end of longer click routines
         }
 }
