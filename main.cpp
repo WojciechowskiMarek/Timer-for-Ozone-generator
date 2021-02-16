@@ -174,6 +174,7 @@ void time_changed() // refreshing contdown timer
   if (NonStopEmission == false) drawIcon(alert, 40, 160, alertWidth, alertHeight);
   }
 
+
 void end_of_ozone_emision_display() 
 {
   tft.setTextSize(2);
@@ -183,6 +184,27 @@ void end_of_ozone_emision_display()
   tft.drawString(hhmm,20,20,7); //hours and minutes display
   tft.drawString(secs,99,130,7);//seconds display
 }  
+void splash_menu() {
+  tft.fillScreen(TFT_BLUE);
+  tft.fillScreen(TFT_RED);
+  tft.fillScreen(TFT_GREEN);
+  tft.fillScreen(TFT_YELLOW);
+  tft.fillScreen(TFT_BLACK);
+  tft.fillScreen(TFT_YELLOW);
+  tft.setTextColor(TFT_BLUE, TFT_YELLOW);
+  tft.setTextSize(4);
+  tft.drawString("BLUE WAVE",10,10,2);
+  tft.setTextSize(1);
+  tft.drawString("Ozone generator",10,60,2);
+  tft.drawString("Controller",10,90,4);
+  tft.setTextSize(1);
+  tft.drawString("Marek Wojciechowski",10,130,4);
+  tft.drawString("Wojciechowski.Marek@Outlook.com",10,160,1);
+  delay(3000);
+  tft.fillScreen(TFT_BLACK);
+}
+  
+
 void setup() {
   pinMode(A1, INPUT_PULLUP);
   Serial.begin(9600);
@@ -199,6 +221,7 @@ void setup() {
   CustomActive = false; // flag for custom menu
   MinuteMenu = false; // flag minutes setup
   HourMenu = false; // flag hours setup
+  splash_menu();
   menu();           // showing menu
 
 }
