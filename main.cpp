@@ -119,11 +119,11 @@ void menu()
   }
   if (MenuCounter == 9){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
-    tft.drawString("1H 30MIM",160,100,x);
+    tft.drawString("1H 30MIN",160,100,x);
   }
   else {
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
-    tft.drawString("1H 30MIM",160,100,x);
+    tft.drawString("1H 30MIN",160,100,x);
   }
   if (MenuCounter == 10){
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
@@ -190,17 +190,19 @@ void splash_menu() {
   tft.fillScreen(TFT_GREEN);
   tft.fillScreen(TFT_YELLOW);
   tft.fillScreen(TFT_BLACK);
-  tft.fillScreen(TFT_YELLOW);
-  tft.setTextColor(TFT_BLUE, TFT_YELLOW);
+  tft.fillScreen(TFT_BLUE);
+  tft.setTextColor(TFT_WHITE, TFT_BLUE);
   tft.setTextSize(4);
-  tft.drawString("BLUE WAVE",10,10,2);
+  tft.drawCentreString("BLUE WAVE",160,10,2);
+  tft.setTextSize(3);
+  tft.drawCentreString("Ozone generator",160,60,2);
+  tft.setTextSize(2);
+  tft.drawCentreString("Controller",160,110,4);
+  tft.setTextSize(2);
+  tft.drawCentreString("Marek Wojciechowski",160,160,2);
   tft.setTextSize(1);
-  tft.drawString("Ozone generator",10,60,2);
-  tft.drawString("Controller",10,90,4);
-  tft.setTextSize(1);
-  tft.drawString("Marek Wojciechowski",10,130,4);
-  tft.drawString("Wojciechowski.Marek@Outlook.com",10,160,1);
-  delay(3000);
+  tft.drawCentreString("Wojciechowski.Marek@Outlook.com",160,210,2);
+  delay(5000);
   tft.fillScreen(TFT_BLACK);
 }
   
